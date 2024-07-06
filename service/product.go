@@ -12,12 +12,15 @@ func (c *Config) GetProductDetails(sessionContext mongo.SessionContext, products
 
 	if getProductsError != nil {
 		c.context.Logger().Error("Error while finding products, error: ", getProductsError.Error())
+		if getProductsError.Error() == mongo.ErrNoDocuments.Error() {
+			return nil, model.ProductNotFound
+		}
 		return nil, getProductsError
 	}
 
 	if len(products) != len(productsIds) {
 		c.context.Logger().Error("Products length don't match the products in the request")
-		return nil, model.OutOfStockError
+		return nil, model.ProductNotFound
 	}
 
 	return products, nil
