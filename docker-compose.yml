@@ -1,0 +1,7 @@
+services:
+  mongop:
+    image: mongo
+    container_name: mongop
+    command: --replSet myReplicaSet
+    ports:
+      - 27017:27017
