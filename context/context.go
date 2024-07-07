@@ -4,9 +4,12 @@ import (
 	"context"
 	"github.com/joho/godotenv"
 	"github.com/sirupsen/logrus"
+	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"log"
 	"os"
+	"simple-order-stock-manager/model/db_model"
 	"time"
 )
 
@@ -15,6 +18,7 @@ type ServiceContext interface {
 	InitMongo() ServiceContext
 	GetMongoClient() *mongo.Client
 	GetDB() *mongo.Database
+	WithEmailIndexes() ServiceContext
 }
 
 type Context struct {
@@ -57,4 +61,17 @@ func (ctx *Context) GetDB() *mongo.Database {
 
 func (ctx *Context) GetMongoClient() *mongo.Client {
 	return ctx.mongodbClient
+}
+
+func (ctx *Context) WithEmailIndexes() ServiceContext {
+	_, indexCreationError := ctx.GetDB().
+		Collection(db_model.SentEmailCollectionName).
+		Indexes().
+		CreateOne(context.Background(), mongo.IndexModel{
+			Keys: bson.D{{db_model.ResourceIdFieldName, 1}},
+		})
+	if indexCreationError != nil {
+		log.Fatal("couldn't create indexes sent_email.resource_id, error: ", indexCreationError.Error())
+	}
+	return ctx
 }

@@ -9,7 +9,6 @@ import (
 )
 
 func (c *Config) FindEmailByResourceId(resourceId primitive.ObjectID) (*db_model.SentEmail, error) {
-	//add index
 	var sentEmailObject db_model.SentEmail
 	findEmailError := c.db.Collection(db_model.SentEmailCollectionName).FindOne(context.Background(), bson.M{"resource_id": resourceId}).Decode(&sentEmailObject)
 	if findEmailError != nil {

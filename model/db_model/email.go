@@ -4,6 +4,8 @@ import "go.mongodb.org/mongo-driver/bson/primitive"
 
 const SentEmailCollectionName = "sent_email"
 
+const ResourceIdFieldName = "resource_id"
+
 type SentEmail struct {
 	ID         primitive.ObjectID `bson:"_id,omitempty"`
 	EmailType  string             `bson:"email_type"`

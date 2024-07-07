@@ -11,7 +11,7 @@ import (
 )
 
 func main() {
-	serviceContext := context.NewContext().InitMongo()
+	serviceContext := context.NewContext().InitMongo().WithEmailIndexes()
 	defer func() {
 		contextWithTimeout, cancel := defaultContext.WithTimeout(defaultContext.Background(), 10*time.Second)
 		defer cancel()
