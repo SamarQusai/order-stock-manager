@@ -38,8 +38,8 @@ func (c *Config) PlaceOrderProcessing(request model.PlaceOrderProcessingRequest)
 		var orderItems []db_model.Item
 		for _, productToAdd := range request.Products {
 			orderItems = append(orderItems, db_model.Item{
-				ID:    productToAdd.ProductId,
-				Price: 0,
+				ID:       productToAdd.ProductId,
+				Quantity: productToAdd.Quantity,
 			})
 		}
 		var order = db_model.Order{
